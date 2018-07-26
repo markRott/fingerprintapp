@@ -188,14 +188,21 @@ public class SecureInteractor implements ISecureContract {
         return false;
     }
 
-    private void initEncodeCipher(int mode) throws KeyStoreException, InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, InvalidAlgorithmParameterException {
+    private void initEncodeCipher(int mode) throws KeyStoreException, InvalidKeySpecException,
+            NoSuchAlgorithmException, InvalidKeyException, InvalidAlgorithmParameterException {
         PublicKey key = keyStore.getCertificate(KEY_ALIAS).getPublicKey();
-        PublicKey unrestricted = KeyFactory.getInstance(key.getAlgorithm()).generatePublic(new X509EncodedKeySpec(key.getEncoded()));
-        OAEPParameterSpec spec = new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT);
+        PublicKey unrestricted = KeyFactory.getInstance(key.getAlgorithm())
+                .generatePublic(new X509EncodedKeySpec(key.getEncoded()));
+        OAEPParameterSpec spec = new OAEPParameterSpec(
+                "SHA-256",
+                "MGF1",
+                MGF1ParameterSpec.SHA1,
+                PSource.PSpecified.DEFAULT);
         cipher.init(mode, unrestricted, spec);
     }
 
-    private void initDecodeCipher(int mode) throws KeyStoreException, NoSuchAlgorithmException, UnrecoverableKeyException, InvalidKeyException {
+    private void initDecodeCipher(int mode) throws KeyStoreException, NoSuchAlgorithmException,
+            UnrecoverableKeyException, InvalidKeyException {
         PrivateKey key = (PrivateKey) keyStore.getKey(KEY_ALIAS, null);
         cipher.init(mode, key);
     }

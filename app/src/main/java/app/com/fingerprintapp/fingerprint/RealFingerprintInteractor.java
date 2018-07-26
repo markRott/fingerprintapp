@@ -85,7 +85,7 @@ public class RealFingerprintInteractor implements IFingerprintInteractor {
 
     private void checkVersion(ObservableEmitter<FingerprintEventData> emitter) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            emitter.onError(new Exception("Device not support fingerprint"));
+            emitter.onErstror(new Exception("Device not support fingerprint"));
         }
     }
 
@@ -116,30 +116,35 @@ public class RealFingerprintInteractor implements IFingerprintInteractor {
         public void onAuthenticationError(int errMsgId, CharSequence errString) {
             if (!emitter.isDisposed()) {
                 emitter.onError(new Exception(errString.toString()));
-
             }
         }
 
         @Override
         public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
-            emitter.onNext(new FingerprintEventData(FingerprintEventType.HINT, helpString.toString()));
+            if (!emitter.isDisposed()) {
+                emitter.onNext(new FingerprintEventData(FingerprintEventType.HINT, helpString.toString()));
+            }
         }
 
         @Override
         public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
-            final Cipher cipher = result.getCryptoObject().getCipher();
-            final String encryptedPinCode = pinStorage.getEncryptedPin();
-            final String decryptPinCode = secureInteractor.decryptString(encryptedPinCode, cipher);
-
-            emitter.onNext(new FingerprintEventData(
-                    FingerprintEventType.SUCCESS,
-                    decryptPinCode));
-            emitter.onComplete();
+            if (!emitter.isDisposed()) {
+                final Cipher cipher = result.getCryptoObject().getCipher();
+                final String encryptedPinCode = pinStorage.getEncryptedPin();
+                final String decryptPinCode = secureInteractor.decryptString(encryptedPinCode, cipher);
+                emitter.onNext(new FingerprintEventData(
+                        FingerprintEventType.SUCCESS,
+                        decryptPinCode));
+                emitter.onComplete();
+            }
         }
 
         @Override
         public void onAuthenticationFailed() {
-            emitter.onNext(new FingerprintEventData(FingerprintEventType.FAIL, "onAuthenticationFailed"));
+            if (!emitter.isDisposed()) {
+                emitter.onNext(new FingerprintEventData(FingerprintEventType.FAIL,
+                        "authentication Failed"));
+            }
         }
     }
 }
