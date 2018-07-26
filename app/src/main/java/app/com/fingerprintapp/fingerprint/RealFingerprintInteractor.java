@@ -8,6 +8,11 @@ import android.support.v4.os.CancellationSignal;
 
 import javax.crypto.Cipher;
 
+import app.com.fingerprintapp.fingerprint.enums.FingerprintEventType;
+import app.com.fingerprintapp.fingerprint.enums.FingerprintSensorState;
+import app.com.fingerprintapp.fingerprint.model.FingerprintEventData;
+import app.com.fingerprintapp.fingerprint.secure.ISecureContract;
+import app.com.fingerprintapp.fingerprint.storage.IPinStorage;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.Single;
@@ -19,12 +24,12 @@ public class RealFingerprintInteractor implements IFingerprintInteractor {
     private FingerprintManagerCompat fingerprintManager;
 
     private IPinStorage pinStorage;
-    private SecureInteractor secureInteractor;
+    private ISecureContract secureInteractor;
 
     public RealFingerprintInteractor(
             @NonNull FingerprintManagerCompat fingerprintManager,
             @NonNull KeyguardManager keyguardManager,
-            SecureInteractor secureInteractor,
+            ISecureContract secureInteractor,
             IPinStorage pinStorage) {
 
         this.fingerprintManager = fingerprintManager;
@@ -95,12 +100,12 @@ public class RealFingerprintInteractor implements IFingerprintInteractor {
     private static class AuthenticationCallbackWrapper extends FingerprintManagerCompat.AuthenticationCallback {
 
         private final IPinStorage pinStorage;
-        private final SecureInteractor secureInteractor;
+        private final ISecureContract secureInteractor;
         private final ObservableEmitter<FingerprintEventData> emitter;
 
         AuthenticationCallbackWrapper(
                 IPinStorage pinStorage,
-                SecureInteractor secureInteractor,
+                ISecureContract secureInteractor,
                 ObservableEmitter<FingerprintEventData> emitter) {
             this.pinStorage = pinStorage;
             this.secureInteractor = secureInteractor;

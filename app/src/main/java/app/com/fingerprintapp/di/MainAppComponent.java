@@ -1,12 +1,7 @@
 package app.com.fingerprintapp.di;
 
-import android.content.Context;
-
 import javax.inject.Singleton;
 
-import app.com.fingerprintapp.fingerprint.IFingerprintInteractor;
-import app.com.fingerprintapp.fingerprint.IPinStorage;
-import app.com.fingerprintapp.fingerprint.SecureInteractor;
 import app.com.fingerprintapp.ui.MainActivity;
 import app.com.fingerprintapp.ui.SignUpActivity;
 import dagger.Component;

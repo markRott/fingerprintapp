@@ -7,12 +7,14 @@ import javax.inject.Inject;
 
 import app.com.fingerprintapp.MyApp;
 import app.com.fingerprintapp.R;
-import app.com.fingerprintapp.fingerprint.FingerprintEventData;
 import app.com.fingerprintapp.fingerprint.IFingerprintInteractor;
+import app.com.fingerprintapp.fingerprint.model.FingerprintEventData;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 
 public class MainActivity extends BaseActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private TextView tvPinCode;
 

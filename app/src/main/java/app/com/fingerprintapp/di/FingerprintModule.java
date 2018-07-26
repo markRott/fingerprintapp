@@ -11,11 +11,12 @@ import java.util.Objects;
 import javax.inject.Singleton;
 
 import app.com.fingerprintapp.fingerprint.IFingerprintInteractor;
-import app.com.fingerprintapp.fingerprint.IPinStorage;
+import app.com.fingerprintapp.fingerprint.secure.ISecureContract;
+import app.com.fingerprintapp.fingerprint.storage.IPinStorage;
 import app.com.fingerprintapp.fingerprint.PreMarshmallowFingerprintInteractor;
-import app.com.fingerprintapp.fingerprint.PrefFingerprintStorage;
+import app.com.fingerprintapp.fingerprint.storage.PrefFingerprintStorage;
 import app.com.fingerprintapp.fingerprint.RealFingerprintInteractor;
-import app.com.fingerprintapp.fingerprint.SecureInteractor;
+import app.com.fingerprintapp.fingerprint.secure.SecureInteractor;
 import dagger.Module;
 import dagger.Provides;
 
@@ -26,7 +27,7 @@ public class FingerprintModule {
     @Singleton
     public IFingerprintInteractor provideFingerprintInteractor(
             Context context,
-            SecureInteractor secureInteractor,
+            ISecureContract secureInteractor,
             IPinStorage pinStorage) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -42,7 +43,7 @@ public class FingerprintModule {
 
     @Provides
     @Singleton
-    public SecureInteractor provideSecureInteractor(Context context) {
+    public ISecureContract provideSecureInteractor(Context context) {
         return new SecureInteractor(context);
     }
 
