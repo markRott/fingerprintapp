@@ -5,7 +5,7 @@ import app.com.fingerprintapp.fingerprint.model.FingerprintEventData;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-public interface IFingerprintInteractor {
+public interface IFingerprintManager {
 
     Single<FingerprintSensorState> checkFingerprintSensorState();
 

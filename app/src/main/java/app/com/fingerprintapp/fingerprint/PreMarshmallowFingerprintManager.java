@@ -5,7 +5,7 @@ import app.com.fingerprintapp.fingerprint.model.FingerprintEventData;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-public class PreMarshmallowFingerprintInteractor implements IFingerprintInteractor {
+public class PreMarshmallowFingerprintManager implements IFingerprintManager {
 
     @Override
     public Single<FingerprintSensorState> checkFingerprintSensorState() {

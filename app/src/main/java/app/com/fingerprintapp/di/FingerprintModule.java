@@ -10,13 +10,13 @@ import java.util.Objects;
 
 import javax.inject.Singleton;
 
-import app.com.fingerprintapp.fingerprint.IFingerprintInteractor;
+import app.com.fingerprintapp.fingerprint.IFingerprintManager;
 import app.com.fingerprintapp.fingerprint.secure.ISecureContract;
 import app.com.fingerprintapp.fingerprint.storage.IPinStorage;
-import app.com.fingerprintapp.fingerprint.PreMarshmallowFingerprintInteractor;
+import app.com.fingerprintapp.fingerprint.PreMarshmallowFingerprintManager;
 import app.com.fingerprintapp.fingerprint.storage.PrefFingerprintStorage;
-import app.com.fingerprintapp.fingerprint.RealFingerprintInteractor;
-import app.com.fingerprintapp.fingerprint.secure.SecureInteractor;
+import app.com.fingerprintapp.fingerprint.RealFingerprintManager;
+import app.com.fingerprintapp.fingerprint.secure.SecureManager;
 import dagger.Module;
 import dagger.Provides;
 
@@ -25,26 +25,26 @@ public class FingerprintModule {
 
     @Provides
     @Singleton
-    public IFingerprintInteractor provideFingerprintInteractor(
+    public IFingerprintManager provideFingerprintInteractor(
             Context context,
             ISecureContract secureInteractor,
             IPinStorage pinStorage) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return new RealFingerprintInteractor(
+            return new RealFingerprintManager(
                     FingerprintManagerCompat.from(context),
                     Objects.requireNonNull(context.getSystemService(KeyguardManager.class)),
                     secureInteractor,
                     pinStorage);
         } else {
-            return new PreMarshmallowFingerprintInteractor();
+            return new PreMarshmallowFingerprintManager();
         }
     }
 
     @Provides
     @Singleton
     public ISecureContract provideSecureInteractor(Context context) {
-        return new SecureInteractor(context);
+        return new SecureManager(context);
     }
 
     @Provides

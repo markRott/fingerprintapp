@@ -1,8 +1,6 @@
 package app.com.fingerprintapp.ui;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -14,7 +12,7 @@ import javax.inject.Inject;
 
 import app.com.fingerprintapp.MyApp;
 import app.com.fingerprintapp.R;
-import app.com.fingerprintapp.fingerprint.IFingerprintInteractor;
+import app.com.fingerprintapp.fingerprint.IFingerprintManager;
 import app.com.fingerprintapp.fingerprint.enums.FingerprintSensorState;
 import app.com.fingerprintapp.fingerprint.secure.ISecureContract;
 import app.com.fingerprintapp.fingerprint.storage.IPinStorage;
@@ -34,7 +32,7 @@ public class SignUpActivity extends BaseActivity {
     @Inject
     IPinStorage pinStorage;
     @Inject
-    IFingerprintInteractor fingerprintInteractor;
+    IFingerprintManager fingerprintInteractor;
     @Inject
     ISecureContract secureInteractor;
 

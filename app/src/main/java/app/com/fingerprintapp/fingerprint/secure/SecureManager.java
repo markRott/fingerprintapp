@@ -37,18 +37,18 @@ import javax.crypto.spec.PSource;
 
 import static android.content.Context.FINGERPRINT_SERVICE;
 
-public class SecureInteractor implements ISecureContract {
+public class SecureManager implements ISecureContract {
 
     private static final String KEY_ALIAS = "FINGERPRINT_KEY_PAIR_ALIAS";
     private static final String KEY_STORE = "AndroidKeyStore";
-    private static final String TAG = SecureInteractor.class.getSimpleName();
+    private static final String TAG = SecureManager.class.getSimpleName();
 
     private Context context;
     private Cipher cipher;
     private KeyStore keyStore;
     private KeyPairGenerator keyPairGenerator;
 
-    public SecureInteractor(Context context) {
+    public SecureManager(Context context) {
         this.context = context;
     }
 

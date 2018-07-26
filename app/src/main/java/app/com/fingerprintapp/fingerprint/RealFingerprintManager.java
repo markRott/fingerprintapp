@@ -17,7 +17,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.Single;
 
-public class RealFingerprintInteractor implements IFingerprintInteractor {
+public class RealFingerprintManager implements IFingerprintManager {
 
     private KeyguardManager keyguardManager;
     private CancellationSignal cancellationSignal;
@@ -26,7 +26,7 @@ public class RealFingerprintInteractor implements IFingerprintInteractor {
     private IPinStorage pinStorage;
     private ISecureContract secureInteractor;
 
-    public RealFingerprintInteractor(
+    public RealFingerprintManager(
             @NonNull FingerprintManagerCompat fingerprintManager,
             @NonNull KeyguardManager keyguardManager,
             ISecureContract secureInteractor,
@@ -85,7 +85,7 @@ public class RealFingerprintInteractor implements IFingerprintInteractor {
 
     private void checkVersion(ObservableEmitter<FingerprintEventData> emitter) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            emitter.onErstror(new Exception("Device not support fingerprint"));
+            emitter.onError(new Exception("Device not support fingerprint"));
         }
     }
 
