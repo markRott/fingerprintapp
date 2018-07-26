@@ -47,14 +47,14 @@ public class Utils {
     private static KeyStore sKeyStore;
     private static KeyPairGenerator sKeyPairGenerator;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public static boolean checkSensorState(@NonNull Context context) {
-        FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(FINGERPRINT_SERVICE);
-        if (fingerprintManager.isHardwareDetected()) {
-            KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
-            return keyguardManager.isKeyguardSecure() && fingerprintManager.hasEnrolledFingerprints();
-        } else return false;
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.M)
+//    public static boolean checkSensorState(@NonNull Context context) {
+//        FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(FINGERPRINT_SERVICE);
+//        if (fingerprintManager.isHardwareDetected()) {
+//            KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+//            return keyguardManager.isKeyguardSecure() && fingerprintManager.hasEnrolledFingerprints();
+//        } else return false;
+//    }
 
     @Nullable
     public static String encryptString(String string) {

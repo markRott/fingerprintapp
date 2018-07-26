@@ -1,10 +1,12 @@
 package app.com.fingerprintapp.ui;
 
-import android.content.SharedPreferences;
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -12,52 +14,54 @@ import app.com.fingerprintapp.MyApp;
 import app.com.fingerprintapp.R;
 import app.com.fingerprintapp.fingerprint.FingerprintSensorState;
 import app.com.fingerprintapp.fingerprint.IFingerprintInteractor;
+import app.com.fingerprintapp.fingerprint.IPinStorage;
+import app.com.fingerprintapp.fingerprint.SecureInteractor;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableSingleObserver;
 
 public class SignUpActivity extends BaseActivity {
 
-    public static final String KEY_PASSWORD = "KEY_PASSWORD";
-
+    private Button login;
     private EditText newPinCode;
     private Button setupPinCode;
-    private SharedPreferences sharedPreferences;
-
 
     @Inject
+    IPinStorage pinStorage;
+    @Inject
     IFingerprintInteractor fingerprintInteractor;
+    @Inject
+    SecureInteractor secureInteractor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        MyApp.getINSTANCE().getMainAppComponent().inject(this);
+        MyApp.getInstance().getMainAppComponent().inject(this);
         initViews();
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
+    private void initViews() {
+        newPinCode = findViewById(R.id.edt_new_pin_code);
+        setupPinCode = findViewById(R.id.btn_setup_pin_code);
+        login = findViewById(R.id.btn_login);
+
+        setupPinCode.setOnClickListener(v -> savePinCode());
+        login.setOnClickListener(v -> openMainScreen());
+    }
+
+    private void openMainScreen() {
+        if (pinStorage.hasPinCode()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Please, setup pin code", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         checkFingerprintState();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        clearDispose();
-    }
-
-    private void initViews() {
-        newPinCode = findViewById(R.id.edt_new_pin_code);
-        setupPinCode = findViewById(R.id.btn_setup_pin_code);
-        setupPinCode.setOnClickListener(v -> savePinCode());
-    }
-
-    private void savePinCode() {
-        final String pinCode = newPinCode.getText().toString().trim();
-//        final String cryptoPinCode = Utils.encryptString(pinCode);
-//        sharedPreferences.edit().putString(KEY_PASSWORD, cryptoPinCode).apply();
     }
 
     private void checkFingerprintState() {
@@ -88,6 +92,20 @@ public class SignUpActivity extends BaseActivity {
             case READY:
                 System.out.println("READY");
                 break;
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void savePinCode() {
+        if (secureInteractor.checkSensorState()) {
+            if (!pinStorage.hasPinCode()) {
+                final String pinCode = newPinCode.getText().toString().trim();
+                final String cryptoPinCode = secureInteractor.encryptString(pinCode);
+                pinStorage.saveEncryptedPinCode(cryptoPinCode);
+                Toast.makeText(this, "Setup pin code action DONE", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "you have the pin code installed", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

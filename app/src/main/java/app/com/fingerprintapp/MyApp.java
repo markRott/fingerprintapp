@@ -2,7 +2,7 @@ package app.com.fingerprintapp;
 
 import android.app.Application;
 
-import app.com.fingerprintapp.di.ContextModule;
+import app.com.fingerprintapp.di.ApplicationModule;
 import app.com.fingerprintapp.di.DaggerMainAppComponent;
 import app.com.fingerprintapp.di.FingerprintModule;
 import app.com.fingerprintapp.di.MainAppComponent;
@@ -20,13 +20,12 @@ public class MyApp extends Application {
 
         mainAppComponent = DaggerMainAppComponent
                 .builder()
-                .contextModule(new ContextModule(this))
+                .applicationModule(new ApplicationModule(this))
                 .fingerprintModule(new FingerprintModule())
                 .build();
-        System.out.println("mainAppComponent = " + mainAppComponent);
     }
 
-    public static MyApp getINSTANCE() {
+    public static MyApp getInstance() {
         return INSTANCE;
     }
 
